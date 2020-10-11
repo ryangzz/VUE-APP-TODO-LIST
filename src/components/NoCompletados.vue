@@ -1,7 +1,9 @@
 <template>
     <div class="notcomp">
         <h3>Not Completed</h3>
-        <div class="task" v-for="tks of tasks">{{tks.task}}<i class="fas fa-trash-alt"></i><i class="fas fa-check"></i></div>
+        <div class="task" v-for="(tks, index) of tasks" :key="index">{{tks.task}}
+            <i class="fas fa-trash-alt" @click="deleteTask(index)"></i><i class="fas fa-check" @click="complete(index)"></i>
+        </div>
     </div>
 </template>
 <script>
@@ -12,6 +14,14 @@ export default {
     data() {
         return {
             tasks:this.tareas
+        }
+    },
+    methods: {
+        complete(index){
+            this.$emit('action', index);
+        },
+        deleteTask(index){
+            this.$emit('delete', index);
         }
     },
 }

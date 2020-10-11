@@ -1,8 +1,8 @@
 <template>
     <div class="container">
         <input type="text" class="txtb" placeholder="Add a task" v-model="txtTask" @keyup.enter.prevent="addTask">
-        <NoCompletados :tareas="tasks"/>
-        <Completados />
+        <NoCompletados :tareas="tasksNoComplete" @action="addTaskComplete" @delete="deleteTaskNoComplete"/>
+        <Completados :tareas="tasksComplete" @delete="deleteTaskComplete"/>
     </div>
 </template>
 
@@ -13,16 +13,27 @@ export default {
     data() {
         return {
             txtTask:"",
-            tasks:[]
+            tasksNoComplete:[],
+            tasksComplete:[],
         }
     },
     methods: {
         addTask(){
             let task = this.txtTask;
             if(task!=""){
-                this.tasks.push({task, status:true});
+                this.tasksNoComplete.push({task, status:true});
             }
             this.txtTask = "";
+        },
+        addTaskComplete(index){
+            this.tasksComplete.push(this.tasksNoComplete[index]);
+            this.tasksNoComplete.splice(index, 1);
+        },
+        deleteTaskNoComplete(index){
+            this.tasksNoComplete.splice(index, 1);
+        },
+        deleteTaskComplete(index){
+            this.tasksComplete.splice(index, 1);
         },
     },
     components:{
